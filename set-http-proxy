@@ -142,7 +142,10 @@ if [ "$PROXY_ENABLED" = "Yes" ]; then
   export http_proxy="$PROXY_URL"
   export https_proxy="$PROXY_URL"
   git config --global http.proxy "$PROXY_URL"
-  echo "    settings.xml:"
+  npm config set proxy "$PROXY_URL"
+  npm config set http-proxy "$PROXY_URL" 
+  svn-proxy-patch $PROXY_HOST $PROXY_PORT
+  echo "*** MAVEN. Extract of maven settings.xml:"
   # uses $PROXY_HOST and $PROXY_PORT
   mvn-proxy-patch true
 else 
@@ -150,6 +153,16 @@ else
   unset http_proxy
   unset https_proxy
   git config --global --unset http.proxy
-  echo "    settings.xml:"
+  npm config rm proxy
+  npm config rm https-proxy
+  svn-proxy-patch
+  echo "*** MAVEN. Extract of maven settings.xml:"
   mvn-proxy-patch false
 fi
+
+echo "*** GIT. Result of git config --global --get http.proxy:"
+git config --global --get http.proxy
+echo "*** NPM Result of npm config get proxy:"
+npm config get proxy
+echo "*** SVN. Extract of ~/.subversion.servers file:"
+cat ~/.subversion/servers | grep proxy
