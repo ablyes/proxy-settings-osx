@@ -107,7 +107,7 @@ if [ "$PROXY_ENABLED" = "Yes" ]; then
   PROXY="$PROXY_HOST:$PROXY_PORT"
 else
   # proxy not explicitely set, try proxy.pac
-  PROXY_INFO=`networksetup -getautoproxyurl $NETWORK`
+  PROXY_INFO=`networksetup -getautoproxyurl "$NETWORK"`
   PROXY_ENABLED=`enabled "$PROXY_INFO"`
   if [ "$PROXY_ENABLED" = "Yes" ]; then 
     PROXY_PAC=`echo "$PROXY_INFO" | grep "^URL:" | sed "s/URL: //"`
